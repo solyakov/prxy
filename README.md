@@ -1,4 +1,4 @@
-# HTTPS Proxy
+# Prxy
 
 ## Architecture Diagram
 
