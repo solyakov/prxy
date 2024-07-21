@@ -4,7 +4,7 @@
 
 ```
 
-                                  localhost | Internet
+                                   localnet | Internet
                                             |
 +---------+                   +--------+    |      +--------+    +--------------+
 | Browser |--(HTTP CONNECT)-->| Client |==(mTLS)==>| Server |--->| HTTPS Server |
