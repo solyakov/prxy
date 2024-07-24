@@ -1,9 +1,8 @@
 SHELL := /bin/bash
 
 DATA_DIR := data
-CA_SAN := DNS:localhost,IP:127.0.0.1
-SERVER_SAN := $(CA_SAN)
-CLIENT_SAN := $(CA_SAN)
+SERVER_SAN := DNS:localhost,IP:127.0.0.1 # MUST MATCH the hostname or IP that the client uses to connect
+CLIENT_SAN := DNS:example.com # Server validates expiry, CA signature, etc., but NOT the hostname
 
 .PHONY: client server keys clean
 
@@ -20,7 +19,6 @@ keys: $(DATA_DIR)
 	openssl ecparam -name prime256v1 -genkey -noout -out $(DATA_DIR)/ca.key
 	openssl req -new -x509 -nodes -sha256 -key $(DATA_DIR)/ca.key -out $(DATA_DIR)/ca.crt \
 	    -subj "/CN=CA" \
-	    -addext "subjectAltName = $(CA_SAN)" \
 	    -addext "basicConstraints = CA:TRUE,pathlen:0" \
 	    -addext "keyUsage = critical, digitalSignature, cRLSign, keyCertSign" \
 		-days 3650
