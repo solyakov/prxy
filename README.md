@@ -27,7 +27,7 @@ To start the proxy client, run:
 make client
 ```
 
-Make sure to configure your browser to use the proxy client. The client listens on `localhost:8080` by default.
+Make sure to configure your browser to use the proxy client. The client listens on `localhost:8080` and forwards the traffic to `localhost:8081` by default.
 
 To start the proxy server, run:
 
@@ -44,7 +44,7 @@ The proxy client and server use self-signed certificates for TLS. These certific
 ## Installation
 
 1. Update the `PRXY_SERVER` environment variable in the [prxy-client.service](systemd/prxy-client.service) to match the IP address of the server machine.
-2. Update the `SERVER_SAN` in the [Makefile](Makefile) to match the `PRXY_SERVER`.
+2. Update the `SERVER_SAN` in the [makefile](makefile) to match the `PRXY_SERVER`.
 3. Generate the TLS certificates by running `make keys`.
 4. Install the proxy server by running `make install-server` on the server machine.
 5. Install the proxy client by running `make install-client` on the client machine.
