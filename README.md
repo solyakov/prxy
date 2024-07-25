@@ -41,4 +41,19 @@ The server listens on `localhost:8081` by default.
 
 The proxy client and server use self-signed certificates for TLS. These certificates are generated using the `make keys` command and are stored in the `data/` directory.
 
-Make sure to update the SAN (Subject Alternative Name) fields in the `makefile` file to match your local setup.
+## Installation
+
+1. Update the `PRXY_SERVER` environment variable in the [prxy-client.service](systemd/prxy-client.service) to match the IP address of the server machine.
+2. Update the `SERVER_SAN` in the [Makefile](Makefile) to match the `PRXY_SERVER`.
+3. Generate the TLS certificates by running `make keys`.
+4. Install the proxy server by running `make install-server` on the server machine.
+5. Install the proxy client by running `make install-client` on the client machine.
+
+## Uninstallation
+
+1. Uninstall the proxy client by running `make uninstall-client` on the client machine.
+2. Uninstall the proxy server by running `make uninstall-server` on the server machine.
+
+## Configuration
+
+The proxy client and server configurations are stored in the [prxy-client.service](systemd/prxy-client.service) and [prxy-server.service](systemd/prxy-server.service) files, respectively.

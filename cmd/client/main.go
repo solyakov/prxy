@@ -12,7 +12,7 @@ import (
 
 type Options struct {
 	Listen      string        `short:"l" long:"listen" env:"PRXY_LISTEN" description:"Local address to listen for incoming connections" default:"localhost:8080"`
-	Proxy       string        `short:"p" long:"proxy" env:"PRXY_PROXY" description:"Remote proxy server address" default:"localhost:8081"`
+	Server      string        `short:"s" long:"server" env:"PRXY_SERVER" description:"Remote proxy server address" default:"localhost:8081"`
 	Timeout     time.Duration `short:"t" long:"timeout" env:"PRXY_TIMEOUT" description:"Timeout for proxy connections" default:"60s"`
 	Buffer      int           `short:"b" long:"buffer" env:"PRXY_BUFFER" description:"Buffer size for data transfer in bytes" default:"32768"`
 	Certificate string        `short:"c" long:"certificate" env:"PRXY_CERTIFICATE" description:"Path to the certificate file" default:"client.crt"`
@@ -24,9 +24,9 @@ type Options struct {
 func handleClientRequest(client net.Conn, opts Options) {
 	defer client.Close()
 
-	server, err := tls.Dial("tcp", opts.Proxy, opts.tlsConfig)
+	server, err := tls.Dial("tcp", opts.Server, opts.tlsConfig)
 	if err != nil {
-		log.Printf("Failed to connect to proxy server %s: %v", opts.Proxy, err)
+		log.Printf("Failed to connect to proxy server %s: %v", opts.Server, err)
 		return
 	}
 	defer server.Close()

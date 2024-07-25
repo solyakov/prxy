@@ -1,0 +1,17 @@
+[Unit]
+Description=Prxy Client
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/prxy-client
+Restart=always
+Environment=PRXY_SERVER=localhost:8081
+Environment=PRXY_CERTIFICATE=/etc/prxy/client.crt
+Environment=PRXY_KEY=/etc/prxy/client.key
+Environment=PRXY_CA=/etc/prxy/ca.crt
+Environment=PRXY_LISTEN=localhost:8080
+Environment=PRXY_TIMEOUT=60s
+Environment=PRXY_BUFFER=32768
+
+[Install]
+WantedBy=multi-user.target
