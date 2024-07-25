@@ -85,5 +85,8 @@ uninstall-client:
 	sudo rm -f /etc/systemd/system/prxy-client.service
 	sudo systemctl daemon-reload
 
+windows-client:
+	GOOS=windows GOARCH=amd64 go build -o $(DATA_DIR)/prxy-client.exe cmd/client/main.go
+
 clean:
 	rm -rf $(DATA_DIR)
