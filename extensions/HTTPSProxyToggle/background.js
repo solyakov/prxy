@@ -4,8 +4,8 @@ const ON_TEXT = 'ON';
 const PROXY_CONFIG = {
     mode: "fixed_servers",
     rules: {
-        singleProxy: {
-            scheme: "https",
+        proxyForHttps: {
+            scheme: "http",
             host: "127.0.0.1",
             port: 8080
         }
