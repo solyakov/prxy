@@ -57,3 +57,13 @@ The proxy client and server use self-signed certificates for TLS. These certific
 ## Configuration
 
 The proxy client and server configurations are stored in the [prxy-client.service](systemd/prxy-client.service) and [prxy-server.service](systemd/prxy-server.service) files, respectively.
+
+## Chrome Extension
+
+For convenience, a Chrome extension is provided in the [extensions](extensions/) directory. To install the extension, follow these steps:
+
+1. Open the Chrome browser and navigate to `chrome://extensions`.
+2. Enable the `Developer mode` toggle.
+3. Click on the `Load unpacked` button and select the `extensions/HTTPSProxyToggle` directory.
+
+All this extension does is toggle the proxy settings in the browser to use the proxy client. The address of the proxy client is hardcoded to `127.0.0.1:8080`. If the proxy client is running on a different address, update the extension accordingly.

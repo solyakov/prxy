@@ -88,5 +88,8 @@ uninstall-client:
 windows-client:
 	GOOS=windows GOARCH=amd64 go build -o $(DATA_DIR)/prxy-client.exe cmd/client/main.go
 
+HTTPSProxyToggle:
+	cd extensions/HTTPSProxyToggle && zip -r ../../data/HTTPSProxyToggle.zip .
+
 clean:
 	rm -rf $(DATA_DIR)

@@ -1,0 +1,14 @@
+{
+    "manifest_version": 3,
+    "name": "Proxy Toggle",
+    "version": "1.0",
+    "description": "Toggle 127.0.0.1:8080 HTTPS proxy on and off.",
+    "permissions": [
+        "proxy",
+        "storage"
+    ],
+    "action": {},
+    "background": {
+        "service_worker": "background.js"
+    }
+}
