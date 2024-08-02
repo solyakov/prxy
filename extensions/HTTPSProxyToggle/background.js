@@ -1,5 +1,5 @@
-const OFF_TEXT = 'OFF';
-const ON_TEXT = 'ON';
+const OFF_TEXT = "OFF";
+const ON_TEXT = "ON";
 
 const PROXY_CONFIG = {
     mode: "fixed_servers",
@@ -12,11 +12,14 @@ const PROXY_CONFIG = {
     }
 };
 
-chrome.runtime.onInstalled.addListener(() => {
-    chrome.storage.local.set({ proxyEnabled: false }, () => {
-        updateProxy(false);
+function initializeProxyState() {
+    chrome.storage.local.get("proxyEnabled", (data) => {
+        updateProxy(data.proxyEnabled);
     });
-});
+}
+
+chrome.runtime.onInstalled.addListener(initializeProxyState);
+chrome.runtime.onStartup.addListener(initializeProxyState);
 
 chrome.action.onClicked.addListener(() => {
     chrome.storage.local.get("proxyEnabled", (data) => {
@@ -32,13 +35,11 @@ function updateProxy(enabled) {
         chrome.proxy.settings.set({ value: PROXY_CONFIG, scope: "regular" }, () => {
             chrome.action.setBadgeText({ text: ON_TEXT });
         });
-    } else {
-        chrome.proxy.settings.clear({ scope: "regular" }, () => {
-            chrome.action.setBadgeText({ text: OFF_TEXT });
-        });
+        return;
     }
+    chrome.proxy.settings.clear({ scope: "regular" }, () => {
+        chrome.action.setBadgeText({ text: OFF_TEXT });
+    });
 }
 
-chrome.storage.local.get("proxyEnabled", (data) => {
-    updateProxy(data.proxyEnabled);
-});
+
