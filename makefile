@@ -10,6 +10,9 @@ BIN_DIR := /usr/local/bin
 client:
 	go run cmd/client/main.go --certificate $(DATA_DIR)/client.crt --key $(DATA_DIR)/client.key --ca $(DATA_DIR)/ca.crt
 
+client-certificate:
+	openssl pkcs12 -export -in $(DATA_DIR)/client.crt -inkey $(DATA_DIR)/client.key -out $(DATA_DIR)/client.p12 -name "Client Certificate"
+
 server:
 	go run cmd/server/main.go --certificate $(DATA_DIR)/server.crt --key $(DATA_DIR)/server.key --ca $(DATA_DIR)/ca.crt
 
