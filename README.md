@@ -67,3 +67,18 @@ For convenience, a Chrome extension is provided in the [extensions](extensions/)
 3. Click on the `Load unpacked` button and select the `extensions/HTTPSProxyToggle` directory.
 
 All this extension does is toggle the proxy settings in the browser to use the proxy client. The address of the proxy client is hardcoded to `127.0.0.1:8080`. If the proxy client is running on a different address, update the extension accordingly.
+
+## Transparent mode (router)
+
+The client also supports a transparent mode for Linux routers. In this mode, HTTPS connections coming from LAN clients are intercepted via iptables and forwarded through the mTLS tunnel to the remote server, without configuring proxies on endpoints.
+
+- Run the client with `--transparent` and listen on an unprivileged port, e.g. `0.0.0.0:8080`.
+- Add NAT rules to redirect TCP/443 to the client and allow INPUT on tcp/8080 from LAN.
+
+See `tprxy_example.sh` for a minimal end-to-end setup script that:
+
+- Creates a `PRXY` chain in the `nat` table
+- Excludes the proxy server itself and localhost to avoid loops
+- Redirects TCP/443 to port 8080
+- Hooks `PREROUTING` on `br-lan` and `OUTPUT` for router’s own traffic
+- Starts the client in a simple restart loop

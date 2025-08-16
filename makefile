@@ -8,7 +8,7 @@ BIN_DIR := /usr/local/bin
 .PHONY: client server keys clean install-server install-client uninstall-server uninstall-client
 
 client:
-	go run cmd/client/main.go --certificate $(DATA_DIR)/client.crt --key $(DATA_DIR)/client.key --ca $(DATA_DIR)/ca.crt
+	go run ./cmd/client/ --certificate $(DATA_DIR)/client.crt --key $(DATA_DIR)/client.key --ca $(DATA_DIR)/ca.crt
 
 client-certificate:
 	openssl pkcs12 -export -in $(DATA_DIR)/client.crt -inkey $(DATA_DIR)/client.key -out $(DATA_DIR)/client.p12 -name "Client Certificate" -legacy
@@ -68,7 +68,7 @@ uninstall-server:
 	sudo systemctl daemon-reload
 
 install-client:
-	go build -o $(DATA_DIR)/prxy-client cmd/client/main.go
+	go build -o $(DATA_DIR)/prxy-client ./cmd/client/
 	sudo install -d -m 755 $(DATA_DIR) $(ETC_DIR)
 	sudo install -m 644 $(DATA_DIR)/client.crt $(ETC_DIR)/client.crt
 	sudo install -m 644 $(DATA_DIR)/client.key $(ETC_DIR)/client.key
@@ -89,7 +89,11 @@ uninstall-client:
 	sudo systemctl daemon-reload
 
 windows-client:
-	GOOS=windows GOARCH=amd64 go build -o $(DATA_DIR)/prxy-client.exe cmd/client/main.go
+	GOOS=windows GOARCH=amd64 go build -o $(DATA_DIR)/prxy-client.exe ./cmd/client/
+
+arm64-client:
+	CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -a -ldflags '-extldflags "-static"' -o prxy-client-arm64 ./cmd/client
+
 
 HTTPSProxyToggle:
 	cd extensions/HTTPSProxyToggle && zip -r ../../data/HTTPSProxyToggle.zip .

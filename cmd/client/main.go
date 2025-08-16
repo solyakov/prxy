@@ -18,6 +18,7 @@ type Options struct {
 	Certificate string        `short:"c" long:"certificate" env:"PRXY_CERTIFICATE" description:"Path to the certificate file" default:"client.crt"`
 	Key         string        `short:"k" long:"key" env:"PRXY_KEY" description:"Path to the key file" default:"client.key"`
 	CA          string        `short:"a" long:"ca" env:"PRXY_CA" description:"Path to the CA certificate file" default:"ca.crt"`
+	Transparent bool          `short:"T" long:"transparent" env:"PRXY_TRANSPARENT" description:"Run in transparent proxy mode"`
 	tlsConfig   *tls.Config
 }
 
@@ -55,19 +56,29 @@ func main() {
 	}
 	opts.tlsConfig = config
 
-	listener, err := net.Listen("tcp", opts.Listen)
+	listener, err := net.Listen("tcp4", opts.Listen)
 	if err != nil {
 		log.Fatalf("Failed to listen on %s: %v", opts.Listen, err)
 	}
 	defer listener.Close()
 
-	log.Printf("Listening on %s", opts.Listen)
+	if opts.Transparent {
+		log.Printf("Listening in transparent proxy mode on %s", opts.Listen)
+	} else {
+		log.Printf("Listening in proxy mode on %s", opts.Listen)
+	}
+
 	for {
 		client, err := listener.Accept()
 		if err != nil {
 			log.Printf("Failed to accept connection: %v", err)
 			continue
 		}
-		go handleClientRequest(client, opts)
+		
+		if opts.Transparent {
+			go handleTransparentRequest(client, opts)
+		} else {
+			go handleClientRequest(client, opts)
+		}
 	}
 }
